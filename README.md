@@ -7,7 +7,7 @@ Mapping a flat mathematical plane onto a 3D grid of voxels is tricky because the
 ## Project Scope
 1. **Input Handling:**
    - Reading 3D volumetric raster data in `.nrrd` format.
-   - Reading a sequence of plane coordinates from a `.csv` file, where each row defines a plane using 3 points (isosceles triangle).
+   - Reading a sequence of plane coordinates from a `.csv` file, where each row defines a plane using 3 points (isosceles triangle) or 4 points (isosceles trapezoid).
 2. **Core Projection Algorithm:**
    - Validating the geometric constraints of the input points (within tolerance of **ε = 0.001**).
    - Projecting the 3D volume onto each 2D plane at high speed (targeting 30 FPS, aiming for 100+ FPS on a **500³** volume).
