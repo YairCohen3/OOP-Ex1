@@ -1,7 +1,7 @@
 # Ex1: 3D Volume Plane Projection
 
 ## Problem Definition
-Given a 3D raster data matrix (M) of dimensions sx*sy*sz (where 1<=sx,sy,sz<2¹⁰ and 0<=x<sx, 0<=y<sy, 0<=z<sz, and each voxel is an 8, 16, or 32-bit unsigned integer) and a 2D geometric plane (P) defined in 3D space, the goal is to compute the 2D cross-sectional projection image (E) of the plane (P) intersecting the volume (M).
+Given a 3D raster data matrix (M) of dimensions sx * sy * sz (where 1<=sx,sy,sz<2¹⁰ and 0<=x<sx, 0<=y<sy, 0<=z<sz, and each voxel is an 8, 16, or 32-bit unsigned integer) and a 2D geometric plane (P) defined in 3D space, the goal is to compute the 2D cross-sectional projection image (E) of the plane (P) intersecting the volume (M).
 
 Mapping a flat mathematical plane onto a 3D grid of voxels is tricky because the sampling points don't perfectly match up. This project solves this by using a fast, reliable, and well-designed algorithm to extract the 3D data and create clean 2D images
 ## Project Scope
