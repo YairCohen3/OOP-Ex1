@@ -1,41 +1,41 @@
-# Software Requirements Specification (SRS) & Detailed Algorithm Design
+# Software Requirements Specification (SRS) & Algorithm Design
 
 ## 1. Software Requirements Specification (SRS)
 
 ### 1.1 Functional Requirements (FR)
-- **FR1 - Volumetric Data Loading:** The system shall read 3D raster matrices from `.nrrd` files of dimensions **sx × sy × sz** (**1 ≤ sx, sy, sz < 2¹⁰**) containing 8-bit, 16-bit, or 32-bit unsigned integers.
-- **FR2 - Plane Trajectory Parsing:** The system shall parse a `.csv` file where each row defines a sampling plane using either 3 3D points **(a, b, c)** (9 floats)
-- **FR3 - Geometric Validation:**
-  * For 3 points **(a, b, c)**: Validate that **|dist(a,b) - dist(a,c)| < ε** (**ε = 0.001**).
-  * For 4 points (a₁, a₂, b, c): Validate that |dist(a₁,b) - dist(a₂,c)| < ε, dist(a₁,a₂) ≤ dist(b,c), and that all 4 points are coplanar within tolerance ε.
-- **FR4 - 2D Plane Projection:** For each valid plane, the system shall compute a 2D matrix **E** representing the cross-section of the 3D volume **M**, assigning `0` to any sample point falling outside the bounds of **M**.
-- **FR5 - Video Export:** The system shall compile the ordered sequence of projected 2D matrices into an `.mp4` video file via a CLI command: `python Ex0.py <file.nrrd> <file.csv> <file.mp4>`.
+- **FR1 - Load 3D Data:** The system will read 3D matrices from `.nrrd` files with dimensions **sx × sy × sz** (where **1 ≤ sx, sy, sz ≤  2¹⁰**). It must support 8-bit, 16-bit, and 32-bit unsigned integers.
+- **FR2 - Read Plane Coordinates:** The system will read a `.csv` file where each row defines a 2D slice (plane) using either 3 3D points **(a, b, c)** (9 floats) or 4 3D points **(a₁, a₂, b, c)** (12 floats).
+- **FR3 - Check Geometry:**
+  - **For 3 points (a, b, c):** Check that the sides are equal in length: **|dist(a,b) - dist(a,c)| < ε** (where **ε = 0.001**).
+  - **For 4 points (a₁, a₂, b, c):** Check that **|dist(a₁,b) - dist(a₂,c)| < ε**, that **dist(a₁,a₂) ≤ dist(b,c)**, and that all 4 points sit on the same flat plane (within **ε**).
+- **FR4 - Create 2D Slices:** For each valid plane, the system will calculate a 2D image matrix **E** that shows the cross-section of the 3D volume **M**. Any point outside the 3D volume will be set to `0` (black).
+- **FR5 - Export Video:** The system will combine all the 2D slices in order and save them as an `.mp4` video using the command line: `python Ex0.py <file.nrrd> <file.csv> <file.mp4>`.
 
 ### 1.2 Non-Functional Requirements (NFR)
-- **NFR1 - Performance (Throughput):** On a **500³** byte volume, the projection calculation shall achieve a minimum runtime performance of 30 FPS, targeting 100+ FPS using vectorized NumPy operations.
-- **NFR2 - Robustness & Stability:** The system shall gracefully handle edge cases including out-of-bounds coordinates, zero-length vectors (**d₁₂ = 0**), and floating-point rounding without crashing.
-- **NFR3 - Maintainability & OOD:** The codebase shall follow Object-Oriented Design principles, separating data loading, geometry validation, projection computation, and video rendering into modular components.
+- **NFR1 - Speed:** For a **500³** byte volume, the system must process at least 30 frames per second (FPS), aiming for 100+ FPS by using fast NumPy array operations.
+- **NFR2 - Stability:** The system must handle edge cases safely without crashing. This includes points outside the volume, zero-length distances (**d₁₂ = 0**), and decimal rounding issues.
+- **NFR3 - Clean Code Structure:** The code will use Object-Oriented Design (OOD), keeping data loading, geometry checks, 2D slicing, and video creation in separate, organized parts.
 
 ---
 
-## 2. Detailed Algorithm Specification
+## 2. Detailed Algorithm Design
 
-### 2.1 Resolving Ambiguities in the Base Pseudocode
+### 2.1 Fixing Edge Cases in the Base Algorithm
 
-> **Overview**
-> The following constraints and optimizations resolve edge cases found in the initial mathematical model, ensuring robust boundary handling and real-time execution.
+> **Overview**  
+> The rules below fix potential math and boundary issues in the basic algorithm so the program runs smoothly and quickly.
 
-**Unified Shape Representation**  
-The system utilizes a single algorithm to process both triangles and trapezoids. An isosceles triangle is seamlessly treated as a degenerate isosceles trapezoid where the two top vertices converge to the exact same point.
+**One Logic for Triangles and Trapezoids**  
+The system uses a single method to handle both shapes. It treats an isosceles triangle simply as a trapezoid where the two top points **(a₁, a₂)** are at the exact same spot.
 
-**Matrix Dimension Discretization**  
-To ensure valid integer pixel coordinates for the 2D output matrix, floating-point `3D` Euclidean distances are rounded to the nearest integer. This guarantees accurate, discrete `Height` and `Width` boundaries.
+**Rounding Image Sizes**  
+Because image dimensions must be whole numbers (pixels), 3D distances are rounded to the nearest integer to set the `Height` and `Width` of the 2D slice.
 
-**Zero-Distance Guard**  
-At the triangle's apex, the distance between the scanning points evaluates to `0`. To proactively prevent division-by-zero exceptions, the horizontal scan is skipped, and a single point is sampled precisely at the center of the row.
+**Preventing Division by Zero**  
+At the very top point of a triangle, the distance between the left and right edges is `0`. To avoid a "division by zero" crash, the system skips scanning across that row and just samples a single point right in the center.
 
-**Voxel Sampling & Boundary Handling**  
-Continuous 3D coordinates are mapped to discrete matrix indices utilizing nearest-neighbor rounding. If a mapped coordinate falls outside the boundaries of the `3D` volume, it safely defaults to a background value of `0`.
+**Sampling Pixels & Out-of-Bounds Points**  
+Decimal 3D coordinates are rounded to the nearest whole number to find the matching pixel in the 3D matrix. If a coordinate falls outside the 3D box, its value is safely set to `0`.
 
-**Vectorized Execution**  
-To achieve sustained real-time performance (**100+ FPS**), standard nested iterative loops are replaced with vectorized array operations (e.g., `NumPy` broadcasting). This architectural shift allows the entire 2D sampling grid to be computed and queried simultaneously in bulk.
+**Fast Array Processing (Vectorization)**  
+To reach **100+ FPS**, the code avoids slow `for` loops. Instead, it uses `NumPy` array operations to calculate and fetch all pixels of a 2D slice at the exact same time.
