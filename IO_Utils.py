@@ -2,7 +2,7 @@ import re
 from typing import List
 import numpy as np
 import cv2
-from plane import Plane
+from Plane import Plane
 
 
 def load_planes_from_csv(csv_path: str):

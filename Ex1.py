@@ -1,8 +1,8 @@
 import sys
 import time
-from volume import Volume
-from projector import Projector
-from io_utils import load_planes_from_csv, save_frames_to_mp4
+from Volume import Volume
+from Projector import Projector
+from IO_Utils import load_planes_from_csv, save_frames_to_mp4
 
 
 def main():

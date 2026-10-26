@@ -18,12 +18,12 @@ class Volume:
 
     def get_voxel(self, p: np.ndarray) :
 
-        ix = int(round(p[0]))
-        iy = int(round(p[1]))
-        iz = int(round(p[2]))
+        x_val = int(round(p[0]))
+        y_val = int(round(p[1]))
+        z_val = int(round(p[2]))
 
 
-        if 0 <= ix < self.sx and 0 <= iy < self.sy and 0 <= iz < self.sz:
-            return float(self.data[ix, iy, iz])
+        if 0 <= x_val < self.sx and 0 <= y_val < self.sy and 0 <= z_val < self.sz:
+            return float(self.data[x_val, y_val, z_val])
 
         return 0.0

@@ -6,25 +6,25 @@ class Plane:
         if pts.shape == (3, 3):
             a, b, c = self.order_triangle_points(pts[0], pts[1], pts[2])
             self.validate_triangle(a, b, c)
-            self.a1 = a
-            self.a2 = a
-            self.b = b
-            self.c = c
+            self.pt_a1 = a
+            self.pt_a2 = a
+            self.pt_b = b
+            self.pt_c = c
         elif pts.shape == (4, 3):
             a1, a2, b, c = pts[0], pts[1], pts[2], pts[3]
             self.validate_trapezoid(a1, a2, b, c)
-            self.a1 = a1
-            self.a2 = a2
-            self.b = b
-            self.c = c
+            self.pt_a1 = a1
+            self.pt_a2 = a2
+            self.pt_b = b
+            self.pt_c = c
         else:
             raise ValueError(f"Expected 3 or 4 3D points, got shape {pts.shape}")
 
-        self.d_ab = self.dist(self.a1, self.b)
-        self.d_bc = self.dist(self.b, self.c)
+        self.d_ab = self.dist(self.pt_a1, self.pt_b)
+        self.d_bc = self.dist(self.pt_b, self.pt_c)
 
-        self.v_ab = self.vector(self.a1, self.b) / self.d_ab
-        self.v_ac = self.vector(self.a2, self.c) / self.d_ab
+        self.vec_ab = self.vector(self.pt_a1, self.pt_b) / self.d_ab
+        self.vec_ac = self.vector(self.pt_a2, self.pt_c) / self.d_ab
 
     @staticmethod
     def vector(p1: np.ndarray, p2: np.ndarray):
@@ -56,8 +56,8 @@ class Plane:
         d_a1b = self.dist(a1, b)
         d_a2c = self.dist(a2, c)
         if abs(d_a1b - d_a2c) >= epsilon:
-            raise ValueError("Trapezoid legs are not equal:")
-        if d_a1b < epsilon:
+            raise ValueError("Trapezoid legs are not equal")
+        if d_a1b < epsilon or d_a2c < epsilon:
             raise ValueError("Trapezoid leg distance cannot be zero")
 
         d_a1a2 = self.dist(a1, a2)
@@ -72,5 +72,9 @@ class Plane:
         if norm_len > 0:
             unit_normal = normal / norm_len
             distance_from_plane = abs(np.dot(unit_normal, a2 - a1))
-            if distance_from_plane > 0:
+            if distance_from_plane > epsilon:
                 raise ValueError("Points are not coplanar")
+            else:
+                pass
+        else:
+            raise ValueError("Points are not coplanar")
