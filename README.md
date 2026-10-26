@@ -16,7 +16,11 @@ Mapping a flat mathematical plane onto a 3D grid of voxels is tricky because the
    - Compiling the sequence of projected 2D matrices into an `.mp4` video file.
 4. **Documentation & Testing:**
    - Full Software Requirements Specification (SRS), detailed algorithm specification, unit testing strategy, and experimental benchmarking.
-
+## Supported CSV Input Formats
+Each row in `<file.csv>` represents a single projection plane (producing one video frame in order):
+* **3 Points (Isosceles Triangle - 9 floats per row):** `ax, ay, az, bx, by, bz, cx, cy, cz`
+* **4 Points (Isosceles Trapezoid - 12 floats per row):** `a1x, a1y, a1z, a2x, a2y, a2z, bx, by, bz, cx, cy, cz`
+* **Flexible Parsing:** The parser automatically handles optional header rows, `#` comments, parentheses/brackets around points `(x, y, z)`
 ## CLI Usage
 ```bash
 python Ex1.py <file.nrrd> <file.csv> <file.mp4>

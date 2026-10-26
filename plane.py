@@ -4,7 +4,7 @@ class Plane:
     def __init__(self, points):
         pts = np.asarray(points, dtype=np.float64)
         if pts.shape == (3, 3):
-            a, b, c = pts[0], pts[1], pts[2]
+            a, b, c = self.order_triangle_points(pts[0], pts[1], pts[2])
             self.validate_triangle(a, b, c)
             self.a1 = a
             self.a2 = a
@@ -33,6 +33,16 @@ class Plane:
     @staticmethod
     def dist(p1: np.ndarray, p2: np.ndarray):
         return float(np.linalg.norm(p2 - p1))
+
+    def order_triangle_points(self, p0: np.ndarray, p1: np.ndarray, p2: np.ndarray):
+
+        if abs(self.dist(p0, p1) - self.dist(p0, p2)) < epsilon:
+            return p0, p1, p2
+        if abs(self.dist(p1, p0) - self.dist(p1, p2)) < epsilon:
+            return p1, p0, p2
+        if abs(self.dist(p2, p0) - self.dist(p2, p1)) < epsilon:
+            return p2, p0, p1
+        return p0, p1, p2
 
     def validate_triangle(self, a: np.ndarray, b: np.ndarray, c: np.ndarray):
         d_ab = self.dist(a, b)
