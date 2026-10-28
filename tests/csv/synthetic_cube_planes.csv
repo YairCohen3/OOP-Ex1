@@ -1,0 +1,8 @@
+# Example planes for synthetic_cube.nrrd (100x100x100)
+# Triangle in the background region (voxel value 50)
+ax,ay,az,bx,by,bz,cx,cy,cz
+5,5,5,15,5,5,5,15,5
+# Triangle inside the solid block (voxel value 200)
+30,30,30,40,30,30,30,40,30
+# Trapezoid inside the solid block
+30,30,30,40,30,30,30,40,30,40,40,30

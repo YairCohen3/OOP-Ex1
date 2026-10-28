@@ -1,0 +1,11 @@
+# Example planes for MRHead.nrrd (256x256x130)
+# Axis-aligned triangles in three different orientations
+ax,ay,az,bx,by,bz,cx,cy,cz
+60,60,40,80,60,40,60,80,40
+60,100,30,80,100,30,60,100,50
+120,60,30,120,80,30,120,60,50
+# Oblique isosceles triangle
+60,60,40,73,60,40,60,65,52
+# Trapezoid in an axis-aligned plane
+a1x,a1y,a1z,a2x,a2y,a2z,bx,by,bz,cx,cy,cz
+60,100,30,80,100,30,60,120,30,80,120,30
