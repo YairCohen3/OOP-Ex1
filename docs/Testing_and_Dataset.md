@@ -43,5 +43,23 @@ We use Python's `pytest` framework to run automatic tests in four main areas:
   - Open the video with OpenCV (`cv2.VideoCapture`) and count the frames. Make sure the total frame count exactly matches the number of rows in the `<file.csv>`.
 
 ### 2.4 Speed & FPS Tests
-- Time how long it takes to process 100 planes on the large 500^3 file (`benchmark_500.nrrd`).
-- Make sure the average speed is clearly over the required 30 FPS mark (with a goal of passing 100 FPS).
+- Measure the time required to project a set of planes from (`benchmark_500.nrrd`).
+- Calculate projection throughput as the number of projected planes divided by the projection time.
+- Verify that throughput meets the assignment minimum of 30 planes per second, aiming for 100 or more planes per second. Record the number of planes, elapsed time, and measured throughput with the results.
+
+## 3. Running the Tests
+
+From the project root directory, run the automated tests using:
+
+```bash
+python -m pytest -v
+```
+
+If `pytest` is not installed, install it using:
+
+```bash
+python -m pip install pytest
+```
+
+Make sure the required datasets and test input files are available before running the tests.
+

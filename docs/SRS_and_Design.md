@@ -39,3 +39,14 @@ Decimal 3D coordinates are rounded to the nearest whole number to find the match
 
 **Fast Array Processing (Vectorization)**  
 To reach **100+ FPS**, the code avoids slow `for` loops. Instead, it uses `NumPy` array operations to calculate and fetch all pixels of a 2D slice at the exact same time.
+
+### 2.2 Creating the MP4 Video
+
+After all planes have been projected, the video writer:
+
+1. Finds the maximum pixel value across all frames and scales pixel values to the range `0–255`.
+2. Centers each frame on the common-size canvas.
+3. Converts each grayscale frame to a three-channel image for video encoding.
+4. Writes the frames in their original order to an MP4 file at 30 frames per second.
+
+The throughput printed by the command-line program measures the projection loop only. It does not include volume loading, CSV parsing, or MP4 encoding time.
