@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="942d50ea-f1b3-4888-a11c-47df44c57820" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/OOP-Ex1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OOP-Ex1.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/csv/benchmark_500_planes.csv" beforeDir="false" afterPath="$PROJECT_DIR$/tests/csv/benchmark_500_planes.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/MRHead_demo/MRHead_sagittal_sweep.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/MRHead_demo/MRHead_sagittal_sweep_native.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/MRHead_demo/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/results/MRHead_demo/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
