@@ -23,5 +23,5 @@ Each row in `<file.csv>` represents a single projection plane (producing one vid
 * **Flexible Parsing:** The parser automatically handles optional header rows, `#` comments, parentheses/brackets around points `(x, y, z)`
 ## CLI Usage
 ```bash
-python Ex1.py <file.nrrd> <file.csv> <file.mp4>
+python Ex0.py <file.nrrd> <file.csv> <file.mp4>
 ```
