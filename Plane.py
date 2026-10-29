@@ -3,6 +3,8 @@ epsilon = 0.001
 class Plane:
     def __init__(self, points):
         pts = np.asarray(points, dtype=np.float64)
+        if not np.all(np.isfinite(pts)):
+            raise ValueError("All point coordinates must be finite")
         if pts.shape == (3, 3):
             a, b, c = self.order_triangle_points(pts[0], pts[1], pts[2])
             self.validate_triangle(a, b, c)
@@ -51,19 +53,25 @@ class Plane:
             raise ValueError("Triangle legs are not equal")
         if d_ab < epsilon:
             raise ValueError("Triangle leg distance cannot be zero.")
+        twice_area = np.linalg.norm(np.cross(b - a, c - a))
+        altitude = twice_area / d_ab
 
+        if not np.isfinite(altitude) or altitude <= epsilon:
+            raise ValueError(
+                "Triangle points are collinear or nearly collinear"
+            )
     def validate_trapezoid(self, a1: np.ndarray, a2: np.ndarray, b: np.ndarray, c: np.ndarray):
         d_a1b = self.dist(a1, b)
         d_a2c = self.dist(a2, c)
+        d_a1a2 = self.dist(a1, a2)
+        d_bc = self.dist(b, c)
+
+        if d_a1a2 > d_bc:
+            raise ValueError("Top base is larger than bottom base")
         if abs(d_a1b - d_a2c) >= epsilon:
             raise ValueError("Trapezoid legs are not equal")
         if d_a1b < epsilon or d_a2c < epsilon:
             raise ValueError("Trapezoid leg distance cannot be zero")
-
-        d_a1a2 = self.dist(a1, a2)
-        d_bc = self.dist(b, c)
-        if d_a1a2 > d_bc:
-            raise ValueError("Top base is larger than bottom base")
 
         v1 = b - a1
         v2 = c - a1
