@@ -34,7 +34,7 @@ python -m pip install numpy pynrrd opencv-python
 Run the program from the project root:
 
 ```bash
-python Ex0.py <file.nrrd> <file.csv> <file.mp4>
+python Ex0.py <data\file.nrrd> <tests\csv\file.csv> <result\file.mp4>
 ```
 
 Replace the placeholders with the paths to your input volume, CSV file, and desired output video.

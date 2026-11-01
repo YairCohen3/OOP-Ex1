@@ -2,56 +2,112 @@ import numpy as np
 from Plane import Plane
 from Volume import Volume
 
+
 epsilon = 0.001
+
+
 class Projector:
     @staticmethod
     def projection(volume: Volume, plane: Plane):
+        if not np.isfinite(plane.d_ab) or not np.isfinite(plane.d_bc):
+            raise ValueError("Plane dimensions must be finite")
 
         d_ab = int(round(plane.d_ab))
         d_bc = int(round(plane.d_bc))
 
         if d_ab <= 0 or d_bc <= 0:
-            return np.zeros((max(1, d_ab), max(1, d_bc)), dtype=np.float64)
+            return np.zeros(
+                (max(1, d_ab), max(1, d_bc)),
+                dtype=np.float64,
+            )
 
         E_matrix = np.zeros((d_ab, d_bc), dtype=np.float64)
 
         y_indices = np.arange(d_ab, dtype=np.float64)[:, np.newaxis]
 
-        a1_grid = plane.pt_a1 + (y_indices + 1) * plane.vec_ab
-        a2_grid = plane.pt_a2 + (y_indices + 1) * plane.vec_ac
+        with np.errstate(over="ignore", invalid="ignore"):
+            a1_grid = plane.pt_a1 + (y_indices + 1) * plane.vec_ab
+            a2_grid = plane.pt_a2 + (y_indices + 1) * plane.vec_ac
 
-        grid_vec = a2_grid - a1_grid
-        d12_len = np.linalg.norm(grid_vec, axis=1)
+            grid_vec = a2_grid - a1_grid
+            d12_len = np.linalg.norm(grid_vec, axis=1)
 
-        d12_safe = np.where(d12_len < epsilon**3, 1.0, d12_len)
+        if not np.all(np.isfinite(d12_len)):
+            raise ValueError("Plane row lengths must be finite")
+
+        d12_safe = np.where(d12_len < epsilon ** 3, 1.0, d12_len)
         d12_normalized = grid_vec / d12_safe[:, np.newaxis]
 
-        for y in range(d_ab):
-            d12 = d12_len[y]
-            steps = int(round(d12))
-            if steps < 0:
-                continue
+        steps_per_row = np.rint(d12_len).astype(np.intp)
+        max_steps = int(steps_per_row.max(initial=0))
+        step_values = np.arange(max_steps + 1, dtype=np.float64)[np.newaxis, :]
 
-            steps_list = np.arange(steps + 1, dtype=np.float64)
-            d12_vox_line = a1_grid[y] + steps_list[:, np.newaxis] * d12_normalized[y]
+        sample_mask = step_values <= steps_per_row[:, np.newaxis]
 
-            coords = np.round(d12_vox_line).astype(np.int32)
-            pt_x, pt_y, pt_z = coords[:, 0], coords[:, 1], coords[:, 2]
+        with np.errstate(over="ignore", invalid="ignore"):
+            points = (
+                a1_grid[:, np.newaxis, :]
+                + step_values[:, :, np.newaxis]
+                * d12_normalized[:, np.newaxis, :]
+            )
+            rounded_points = np.rint(points)
 
-            valid = (
-                    (pt_x >= 0) & (pt_x < volume.sx) &
-                    (pt_y >= 0) & (pt_y < volume.sy) &
-                    (pt_z >= 0) & (pt_z < volume.sz)
+        valid_samples = (
+            sample_mask
+            & np.all(np.isfinite(rounded_points), axis=2)
+            & (rounded_points[:, :, 0] >= 0)
+            & (rounded_points[:, :, 0] < volume.sx)
+            & (rounded_points[:, :, 1] >= 0)
+            & (rounded_points[:, :, 1] < volume.sy)
+            & (rounded_points[:, :, 2] >= 0)
+            & (rounded_points[:, :, 2] < volume.sz)
+        )
+
+        voxel_indices = np.zeros(rounded_points.shape, dtype=np.intp)
+        voxel_indices[valid_samples] = rounded_points[valid_samples].astype(
+            np.intp
+        )
+
+        with np.errstate(over="ignore", invalid="ignore"):
+            rounded_columns = np.rint(
+                (d_bc / 2.0)
+                - (d12_len[:, np.newaxis] / 2.0)
+                + step_values
             )
 
-            if not np.any(valid):
-                continue
+        valid_output = (
+            valid_samples
+            & np.isfinite(rounded_columns)
+            & (rounded_columns >= 0)
+            & (rounded_columns < d_bc)
+        )
 
-            v_vals = volume.data[pt_x[valid], pt_y[valid], pt_z[valid]]
+        column_indices = np.zeros(rounded_columns.shape, dtype=np.intp)
+        column_indices[valid_output] = rounded_columns[valid_output].astype(
+            np.intp
+        )
 
-            center_pos = np.round((d_bc / 2.0) - (d12 / 2.0) + steps_list[valid]).astype(np.int32)
+        last_write_mask = valid_output.copy()
+        duplicate_next = (
+            valid_output[:, :-1]
+            & valid_output[:, 1:]
+            & (column_indices[:, :-1] == column_indices[:, 1:])
+        )
+        last_write_mask[:, :-1] &= ~duplicate_next
 
-            valid_e = (center_pos >= 0) & (center_pos < d_bc)
-            E_matrix[y, center_pos[valid_e]] = v_vals[valid_e]
+        row_indices = np.broadcast_to(
+            np.arange(d_ab, dtype=np.intp)[:, np.newaxis],
+            valid_output.shape,
+        )
+
+        if np.any(last_write_mask):
+            E_matrix[
+                row_indices[last_write_mask],
+                column_indices[last_write_mask],
+            ] = volume.data[
+                voxel_indices[:, :, 0][last_write_mask],
+                voxel_indices[:, :, 1][last_write_mask],
+                voxel_indices[:, :, 2][last_write_mask],
+            ]
 
         return E_matrix
