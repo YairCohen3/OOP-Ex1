@@ -24,9 +24,10 @@ class Plane:
 
         self.d_ab = self.dist(self.pt_a1, self.pt_b)
         self.d_bc = self.dist(self.pt_b, self.pt_c)
+        self.d_ac = self.dist(self.pt_a1, self.pt_c)
 
         self.vec_ab = self.vector(self.pt_a1, self.pt_b) / self.d_ab
-        self.vec_ac = self.vector(self.pt_a2, self.pt_c) / self.d_ab
+        self.vec_ac = self.vector(self.pt_a2, self.pt_c) / self.d_ac
 
     @staticmethod
     def vector(p1: np.ndarray, p2: np.ndarray):

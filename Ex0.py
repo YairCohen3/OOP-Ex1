@@ -8,7 +8,7 @@ from IO_Utils import load_planes_from_csv, save_frames_to_mp4
 def main():
 
     if len(sys.argv) != 4:
-        print("Usage: python Ex0.py <file.nrrd> <file.csv> <file.mp4>")
+        print("Usage: python Ex0.py data/<file.nrrd> docs/<file.csv> <file.mp4>")
         sys.exit(1)
 
     nrrd_path = sys.argv[1]
