@@ -12,6 +12,8 @@ class Plane:
             self.pt_a2 = a
             self.pt_b = b
             self.pt_c = c
+            self.d_ab = self.dist(self.pt_a1, self.pt_b)
+            self.d_ac = self.dist(self.pt_a1, self.pt_c)
         elif pts.shape == (4, 3):
             a1, a2, b, c = pts[0], pts[1], pts[2], pts[3]
             self.validate_trapezoid(a1, a2, b, c)
@@ -19,12 +21,12 @@ class Plane:
             self.pt_a2 = a2
             self.pt_b = b
             self.pt_c = c
+            self.d_ab = self.dist(self.pt_a1, self.pt_b)
+            self.d_ac = self.dist(self.pt_a2, self.pt_c)
         else:
             raise ValueError(f"Expected 3 or 4 3D points, got shape {pts.shape}")
 
-        self.d_ab = self.dist(self.pt_a1, self.pt_b)
         self.d_bc = self.dist(self.pt_b, self.pt_c)
-        self.d_ac = self.dist(self.pt_a1, self.pt_c)
 
         self.vec_ab = self.vector(self.pt_a1, self.pt_b) / self.d_ab
         self.vec_ac = self.vector(self.pt_a2, self.pt_c) / self.d_ac

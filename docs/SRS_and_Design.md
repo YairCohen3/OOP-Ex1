@@ -3,7 +3,7 @@
 ## 1. Software Requirements Specification (SRS)
 
 ### 1.1 Functional Requirements (FR)
-- **FR1 - Load 3D Data:** The system will read 3D matrices from `.nrrd` files with dimensions **sx × sy × sz** (where **1 ≤ sx, sy, sz ≤  2¹⁰**). It must support 8-bit, 16-bit, and 32-bit unsigned integers.
+- **FR1 - Load 3D Data:** The system will read 3D matrices from `.nrrd` files with dimensions **sx × sy × sz** (where **1 ≤ sx, sy, sz <  2¹⁰**). It must support 8-bit, 16-bit, and 32-bit unsigned integers.
 - **FR2 - Read Plane Coordinates:** The system will read a `.csv` file where each row defines a 2D slice (plane) using either 3 3D points **(a, b, c)** (9 floats) or 4 3D points **(a₁, a₂, b, c)** (12 floats).
 - **FR3 - Check Geometry:**
   - **For 3 points (a, b, c):** Check that the sides are equal in length: **|dist(a,b) - dist(a,c)| < ε** (where **ε = 0.001**).

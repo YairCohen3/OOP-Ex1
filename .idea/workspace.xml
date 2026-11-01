@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="942d50ea-f1b3-4888-a11c-47df44c57820" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ex0.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ex0.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Plane.py" beforeDir="false" afterPath="$PROJECT_DIR$/Plane.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/SRS_and_Design.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/SRS_and_Design.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/tests/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,5 +97,16 @@
       <updated>1793118527978</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
