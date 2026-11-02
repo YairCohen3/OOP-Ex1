@@ -2,10 +2,10 @@
 
 import subprocess
 import sys
-
+import pytest
+from IO_Utils import save_frames_to_mp4
 import cv2
 import numpy as np
-
 from IO_Utils import load_planes_from_csv
 
 
@@ -87,3 +87,25 @@ def test_cli_replaces_invalid_csv_rows_with_black_frames(project_root, data_dir,
         assert np.all(black_frame == 0)
     finally:
         capture.release()
+
+def test_save_frames_mixed_sizes_and_empty_error(tmp_path):
+    with pytest.raises(ValueError, match="empty"):
+        save_frames_to_mp4([], str(tmp_path / "empty.mp4"))
+
+    frames = [
+        np.full((12, 16), 100.0, dtype=np.float64),
+        np.full((24, 32), 200.0, dtype=np.float64),
+    ]
+    out_mp4 = tmp_path / "mixed_sizes.mp4"
+    save_frames_to_mp4(frames, str(out_mp4))
+    assert out_mp4.is_file() and out_mp4.stat().st_size > 0
+
+
+def test_cli_exits_with_error_on_wrong_argument_count(project_root):
+    result = subprocess.run(
+        [sys.executable, str(project_root / "Ex0.py")],
+        cwd=project_root,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 1

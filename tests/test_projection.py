@@ -1,6 +1,9 @@
 """Projection values and volume-boundary checks using synthetic_cube.nrrd."""
 
 import numpy as np
+import pytest
+import nrrd
+from Plane import Plane
 
 from IO_Utils import load_planes_from_csv
 from Projector import Projector
@@ -51,3 +54,28 @@ def test_small_triangle_near_tip_does_not_crash(data_dir, csv_dir):
 
     assert frame.shape == (1, 1)
     assert np.all(np.isfinite(frame))
+def test_trapezoid_projection_and_none_plane_fallback(data_dir):
+    volume = Volume(str(data_dir / "synthetic_cube.nrrd"))
+    trapezoid = Plane([
+        (25.0, 20.0, 10.0),
+        (35.0, 20.0, 10.0),
+        (20.0, 30.0, 10.0),
+        (40.0, 30.0, 10.0),
+    ])
+    frame = Projector.projection(volume, trapezoid)
+    assert frame.shape == (round(trapezoid.d_ab), round(trapezoid.d_bc))
+    assert np.any(frame == 50)
+
+    black = Projector.projection(volume, None)
+    assert black.shape == (1, 1) and black[0, 0] == 0.0
+
+
+def test_volume_validation_and_get_voxel(data_dir, tmp_path):
+    volume = Volume(str(data_dir / "synthetic_cube.nrrd"))
+    assert volume.get_voxel(np.array([10.0, 10.0, 10.0])) == 50.0
+    assert volume.get_voxel(np.array([-5.0, 10.0, 10.0])) == 0.0
+
+    bad_2d_path = tmp_path / "bad_2d.nrrd"
+    nrrd.write(str(bad_2d_path), np.zeros((10, 10), dtype=np.uint8))
+    with pytest.raises(ValueError, match="Expected 3D volumetric data"):
+        Volume(str(bad_2d_path))

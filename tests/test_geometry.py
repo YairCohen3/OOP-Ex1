@@ -64,3 +64,17 @@ def test_trapezoid_with_top_base_longer_than_bottom_is_rejected():
         ValueError, match="Top base is larger than bottom base"
     ):
         Plane(points)
+def test_triangle_vertex_reordering_finds_correct_apex():
+    # קודקוד הראש (0,0,0) מופיע כנקודה השנייה או השלישית במקום הראשונה
+    p_second = Plane([(10, 0, 0), (0, 0, 0), (0, 10, 0)])
+    p_third = Plane([(10, 0, 0), (0, 10, 0), (0, 0, 0)])
+    assert p_second.d_ab == pytest.approx(10.0)
+    assert p_third.d_ab == pytest.approx(10.0)
+
+
+def test_zero_length_legs_and_invalid_point_shapes_are_rejected():
+    with pytest.raises(ValueError, match="zero"):
+        Plane([(0, 0, 0), (0, 0, 0), (0, 0, 0)])
+
+    with pytest.raises(ValueError, match="Expected 3 or 4 3D points"):
+        Plane([(0, 0, 0), (1, 1, 1)])
