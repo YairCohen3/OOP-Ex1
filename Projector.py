@@ -9,6 +9,10 @@ epsilon = 0.001
 class Projector:
     @staticmethod
     def projection(volume: Volume, plane: Plane):
+        # תוספת: אם השורה ב-CSV לא תקינה (None), החזר פריים שחור (אפסים)
+        if plane is None:
+            return np.zeros((1, 1), dtype=np.float64)
+
         if not np.isfinite(plane.d_ab) or not np.isfinite(plane.d_bc):
             raise ValueError("Plane dimensions must be finite")
 
@@ -35,7 +39,7 @@ class Projector:
         if not np.all(np.isfinite(d12_len)):
             raise ValueError("Plane row lengths must be finite")
 
-        d12_safe = np.where(d12_len < epsilon ** 3, 1.0, d12_len)
+        d12_safe = np.where(d12_len < epsilon, 1.0, d12_len)
         d12_normalized = grid_vec / d12_safe[:, np.newaxis]
 
         steps_per_row = np.rint(d12_len).astype(np.intp)

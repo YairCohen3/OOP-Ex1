@@ -5,12 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="942d50ea-f1b3-4888-a11c-47df44c57820" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plane.py" beforeDir="false" afterPath="$PROJECT_DIR$/Plane.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ex0.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ex0.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IO_Utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/IO_Utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projector.py" beforeDir="false" afterPath="$PROJECT_DIR$/Projector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/MRHead_1.nrrd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/biscuit_cake.nrrd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/croissant.nrrd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/onion.nrrd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/swiss_roll.nrrd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/SRS_and_Design.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/SRS_and_Design.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/tests/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Testing_and_Dataset.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Testing_and_Dataset.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/MRHead_demo/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/MRHead_demo/head_mri_side_scan.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/MRHead_demo/head_mri_side_video.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/MRHead_head.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/csv/biscuit_cake.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/csv/croissant.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/csv/onion.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/csv/swiss_roll.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_cli_video.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_cli_video.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,12 +42,12 @@
     &quot;assignee&quot;: &quot;YaariMeirovich&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/YairCohen3/OOP-Ex1.git",
-    "accountId": "d68f901e-d76a-4571-8c5b-8fafd8d58c10"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/YairCohen3/OOP-Ex1.git&quot;,
+    &quot;accountId&quot;: &quot;d68f901e-d76a-4571-8c5b-8fafd8d58c10&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -40,18 +56,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.Ex1.executor": "Run",
-    "Python.Volume.executor": "Run",
-    "Python.python -m pytest -v.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.Ex1.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Volume.executor&quot;: &quot;Run&quot;,
+    &quot;Python.python -m pytest -v.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="python -m pytest -v" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="OOP-Ex1" />

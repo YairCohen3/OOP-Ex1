@@ -1,15 +1,17 @@
 import re
-from typing import List
+from typing import List, Optional
 import numpy as np
 import cv2
 from Plane import Plane
 
+# קומפילציה חד-פעמית של הביטויים הרגולריים ברמת המודול
+_NUMBER_PATTERN = re.compile(r"[-+]?\d*\.?\d+")
+_LETTER_PATTERN = re.compile(r"[a-zA-Z]")
 
-def load_planes_from_csv(csv_path: str):
 
-    planes = []
-
-    number_pattern = re.compile(r"[-+]?\d*\.?\d+")
+def load_planes_from_csv(csv_path: str, ignore_errors: bool = False) -> List[Optional[Plane]]:
+    planes: List[Optional[Plane]] = []
+    seen_data_row = False
 
     with open(csv_path, mode="r", encoding="utf-8") as f:
         for row_idx, line in enumerate(f):
@@ -18,66 +20,103 @@ def load_planes_from_csv(csv_path: str):
             if not stripped or stripped.startswith("#"):
                 continue
 
-            letters = re.findall(r"[a-zA-Z]+", stripped)
-            if letters:
-                continue
+            if _LETTER_PATTERN.search(stripped):
+                # דילוג על שורת כותרת בתחילת הקובץ בלבד
+                if not seen_data_row and "nan" not in stripped.lower() and "inf" not in stripped.lower():
+                    seen_data_row = True
+                    continue
+                if ignore_errors:
+                    print(f"Warning: Row {row_idx + 1} has invalid text. Using black frame.")
+                    planes.append(None)
+                    continue
+                raise ValueError(f"Row {row_idx + 1} contains non-numeric characters.")
 
-            values = [float(x) for x in number_pattern.findall(stripped)]
-            if not values:
-                continue
+            seen_data_row = True
 
-            if len(values) in (10, 13):
-                values = values[1:]
-
-            if len(values) == 9:
-                points = np.array(values, dtype=np.float64).reshape((3, 3))
-            elif len(values) == 12:
-                points = np.array(values, dtype=np.float64).reshape((4, 3))
-            else:
-                raise ValueError(
-                    f"Row {row_idx + 1} has {len(values)} numbers. "
-                    f"Expected 9 (3 points) or 12 (4 points)."
+            try:
+                # המרה ישירה למערך NumPy ללא יצירת רשימות פייתון זמניות
+                values = np.fromiter(
+                    (float(m.group(0)) for m in _NUMBER_PATTERN.finditer(stripped)),
+                    dtype=np.float64,
                 )
+                if values.size == 0:
+                    continue
 
-            planes.append(Plane(points))
+                # אימות אינדקס השורה במידה וקיימת עמודת אינדקס (10 או 13 ערכים)
+                if values.size in (10, 13):
+                    idx_val = values[0]
+                    if idx_val < 0 or not float(idx_val).is_integer():
+                        raise ValueError(f"Row {row_idx + 1} has an invalid index: {idx_val}")
+                    values = values[1:]
+
+                if values.size == 9:
+                    points = values.reshape((3, 3))
+                elif values.size == 12:
+                    points = values.reshape((4, 3))
+                else:
+                    raise ValueError(
+                        f"Row {row_idx + 1} has {values.size} numbers. "
+                        f"Expected 9 (3 points) or 12 (4 points)."
+                    )
+
+                planes.append(Plane(points))
+
+            except ValueError as err:
+                if ignore_errors:
+                    print(f"Warning: Row {row_idx + 1} is invalid ({err}). Using black frame.")
+                    planes.append(None)
+                else:
+                    raise
 
     return planes
 
 
 def save_frames_to_mp4(frames: List[np.ndarray], output_path: str, fps: int = 30):
-
     if not frames:
         raise ValueError("Cannot create MP4 video from an empty list of frames.")
 
-    # מציאת הגובה והרוחב המקסימליים כדי שכל הפריימים בסרטון יהיו בגודל אחיד
-    max_h = max(frame.shape[0] for frame in frames)
-    max_w = max(frame.shape[1] for frame in frames)
+    # חישוב וקטורי של הגובה והרוחב המקסימליים במעבר אחד
+    shapes = np.array([frame.shape for frame in frames])
+    max_h, max_w = int(shapes[:, 0].max()), int(shapes[:, 1].max())
 
-    # מציאת הערך המקסימלי בכל הפריימים לצורך נרמול ל-8 ביט (0..255)
-    global_max = max(float(np.max(frame)) for frame in frames)
-    if global_max <= 0:
-        global_max = 1.0
+    # הגנה למקרה שכל השורות בקובץ היו פגומות (כולן בגודל 1x1)
+    if max_h <= 1 and max_w <= 1:
+        max_h, max_w = 16, 16
 
-    # הגדרת מקודד הווידאו ל-MP4
+    # בדיקה אם כל הפריימים באותו גודל בדיוק
+    same_shape = bool(np.all(shapes == [max_h, max_w]))
+
+    if same_shape:
+        # איחוד כל הפריימים למערך 3D אחד ונרמול וקטורי מלא במכה אחת
+        stack = np.asarray(frames, dtype=np.float64)
+        global_max = float(stack.max())
+        scale = 255.0 / global_max if global_max > 0 else 0.0
+        canvases = np.clip(stack * scale, 0, 255).astype(np.uint8)
+    else:
+        # הקצאת בלוק זיכרון תלת-ממדי אחד לכל הפריימים מראש ומירכוז לפני נרמול
+        raw_canvases = np.zeros((len(frames), max_h, max_w), dtype=np.float64)
+        y_offsets = (max_h - shapes[:, 0]) // 2
+        x_offsets = (max_w - shapes[:, 1]) // 2
+
+        for i, frame in enumerate(frames):
+            h, w = shapes[i]
+            y0, x0 = y_offsets[i], x_offsets[i]
+            raw_canvases[i, y0:y0 + h, x0:x0 + w] = frame
+
+        global_max = float(raw_canvases.max())
+        scale = 255.0 / global_max if global_max > 0 else 0.0
+        canvases = np.clip(raw_canvases * scale, 0, 255).astype(np.uint8)
+
+    # יצירת אובייקט הווידאו
     fourcc = cv2.VideoWriter.fourcc(*"mp4v")
     writer = cv2.VideoWriter(output_path, fourcc, float(fps), (max_w, max_h), isColor=True)
 
     if not writer.isOpened():
         raise RuntimeError(f"Failed to open video writer for path: {output_path}")
 
-    for frame in frames:
-        # נרמול ערכי הפיקסלים לטווח 0..255
-        norm_frame = np.clip((frame / global_max) * 255.0, 0, 255).astype(np.uint8)
-
-        # מירכוז הפריים בתוך קנבס בגודל אחיד (max_h, max_w)
-        h, w = norm_frame.shape
-        canvas = np.zeros((max_h, max_w), dtype=np.uint8)
-        y_offset = (max_h - h) // 2
-        x_offset = (max_w - w) // 2
-        canvas[y_offset:y_offset + h, x_offset:x_offset + w] = norm_frame
-
-        # המרה ל-3 ערוצים (BGR) לתאימות מלאה עם נגני וידאו כמו VLC
-        bgr_frame = cv2.cvtColor(canvas, cv2.COLOR_GRAY2BGR)
+    # שכפול וקטורי ל-3 ערוצים (BGR) וכתיבה סדרתית ל-VideoWriter
+    bgr_frames = np.repeat(canvases[:, :, :, np.newaxis], 3, axis=3)
+    for bgr_frame in bgr_frames:
         writer.write(bgr_frame)
 
     writer.release()
