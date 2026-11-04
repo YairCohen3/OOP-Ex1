@@ -2,14 +2,12 @@ import numpy as np
 from Plane import Plane
 from Volume import Volume
 
-
 epsilon = 0.001
-
 
 class Projector:
     @staticmethod
     def projection(volume: Volume, plane: Plane):
-        # תוספת: אם השורה ב-CSV לא תקינה (None), החזר פריים שחור (אפסים)
+
         if plane is None:
             return np.zeros((1, 1), dtype=np.float64)
 

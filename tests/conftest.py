@@ -28,7 +28,7 @@ def data_dir(project_root):
 
 
 def _run_popup(title: str, width: int, height: int, build_ui):
-    """יוצר חלון קופץ שסוגר את כל תהליך הרצת הטסטים מיד עם סגירתו."""
+
     try:
         root = tk.Tk()
         root.title(title)
@@ -42,7 +42,7 @@ def _run_popup(title: str, width: int, height: int, build_ui):
                 root.destroy()
             except Exception:
                 pass
-            # עצירה מוחלטת של תהליך פייתון וכל טסטים שרצים ברקע
+
             os._exit(0)
 
         root.protocol("WM_DELETE_WINDOW", close_and_exit)
@@ -59,7 +59,7 @@ def _run_popup(title: str, width: int, height: int, build_ui):
 
 
 def show_error_popup(test_name: str, file_path: str, line_no: int, message: str):
-    """חלון ERROR שנעצר ומפסיק את הריצה ברגע שסוגרים אותו."""
+
     def build(root, close_fn):
         top_bar = tk.Frame(root, bg="#181825", padx=20, pady=12)
         top_bar.pack(fill=tk.X)
@@ -152,7 +152,7 @@ def show_error_popup(test_name: str, file_path: str, line_no: int, message: str)
 
 
 def show_success_popup(total_tests: int):
-    """חלון ירוק כאשר כל הטסטים עברו."""
+
     def build(root, close_fn):
         tk.Label(
             root,
@@ -187,7 +187,7 @@ def show_success_popup(total_tests: int):
     _run_popup("PASSED", 400, 170, build)
 
 
-def pytest_exception_interact(node, call, report):
+def pytest_exception_interact(node, report):
     if report.failed and hasattr(report.longrepr, "reprcrash"):
         crash = report.longrepr.reprcrash
         show_error_popup(

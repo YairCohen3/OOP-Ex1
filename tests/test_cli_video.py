@@ -1,5 +1,3 @@
-"""End-to-end command-line and MP4 checks."""
-
 import subprocess
 import sys
 import pytest
@@ -80,9 +78,9 @@ def test_cli_replaces_invalid_csv_rows_with_black_frames(project_root, data_dir,
         frame_count = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
         assert frame_count == 5
 
-        # קריאת הפריים השני (שנוצר מהאינדקס השלילי) ווידוא שהוא שחור
-        capture.read()  # פריים 0 (תקין)
-        ok, black_frame = capture.read()  # פריים 1 (לא תקין -> שחור)
+
+        capture.read()
+        ok, black_frame = capture.read()
         assert ok
         assert np.all(black_frame == 0)
     finally:

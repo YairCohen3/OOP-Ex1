@@ -1,7 +1,4 @@
-"""Measure projection throughput on 500 planes from benchmark_500.nrrd."""
-
 import time
-
 from IO_Utils import load_planes_from_csv
 from Projector import Projector
 from Volume import Volume

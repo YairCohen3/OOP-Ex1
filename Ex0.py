@@ -8,12 +8,13 @@ from IO_Utils import load_planes_from_csv, save_frames_to_mp4
 
 
 def open_and_play_video(video_path: str):
-    """פותח את הסרטון בנגן המדיה המוגדר במחשב (מנוטרל בזמן טסטים)."""
-    # אם הטסטים של pytest רצים ברקע, לא נקפיץ נגן מדיה
+
+
     if "PYTEST_CURRENT_TEST" in os.environ:
         return
 
     abs_path = os.path.abspath(video_path)
+
     try:
         if sys.platform.startswith("win"):
             os.startfile(abs_path)
@@ -56,7 +57,7 @@ def main():
     save_frames_to_mp4(frames, mp4_path)
     print("Done! Video saved successfully.")
 
-    # פתיחה וניגון אוטומטי של הסרטון
+
     print(f"Playing video: {mp4_path}...")
     open_and_play_video(mp4_path)
 

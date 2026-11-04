@@ -4,29 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="942d50ea-f1b3-4888-a11c-47df44c57820" name="Changes" comment="">
+    <list default="true" id="942d50ea-f1b3-4888-a11c-47df44c57820" name="Changes" comment="testing optimize">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Ex0.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ex0.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IO_Utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/IO_Utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Projector.py" beforeDir="false" afterPath="$PROJECT_DIR$/Projector.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/MRHead_1.nrrd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/biscuit_cake.nrrd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/croissant.nrrd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/onion.nrrd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/swiss_roll.nrrd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/SRS_and_Design.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/SRS_and_Design.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Testing_and_Dataset.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Testing_and_Dataset.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/MRHead_demo/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/MRHead_demo/head_mri_side_scan.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/MRHead_demo/head_mri_side_video.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/MRHead_head.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/csv/biscuit_cake.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/csv/croissant.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/csv/onion.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/csv/swiss_roll.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Volume.py" beforeDir="false" afterPath="$PROJECT_DIR$/Volume.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_cli_video.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_cli_video.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_geometry.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_geometry.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_performance.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_performance.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_projection.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_projection.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,6 +100,15 @@
       <option name="presentableId" value="Default" />
       <updated>1793118527978</updated>
     </task>
+    <task id="LOCAL-00001" summary="testing optimize">
+      <option name="closed" value="true" />
+      <created>1793628081846</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1793628081846</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -124,5 +121,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="testing optimize" />
+    <option name="LAST_COMMIT_MESSAGE" value="testing optimize" />
   </component>
 </project>

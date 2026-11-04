@@ -10,6 +10,10 @@ class Volume:
         if self.data.ndim != 3:
             raise ValueError("Expected 3D volumetric data")
 
+        allowed_voxal_dtype = [np.uint8, np.uint16, np.uint32]
+        if self.data.dtype not in allowed_voxal_dtype:
+            raise ValueError("Matrix data can only be unsigned integer of size 8/16/32 bit")
+
         self.sx, self.sy, self.sz = self.data.shape
 
         max_dim = 2 ** 10
